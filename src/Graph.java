@@ -1,5 +1,8 @@
 package src;
 
+import java.util.LinkedList;
+import java.util.ListIterator;
+
 /**
  * Our graph date structure.
  */
@@ -24,16 +27,52 @@ class Graph {
     }
 
     /**
-     * Depth first search.
+     * Recursive dfs function.
      */
-    public void dfs() {
+    private void dfsRec(int vertex, boolean[] visitedVertices) {
+        visitedVertices[vertex] = true;
+        System.out.println(vertex);
 
+        ListIterator<Integer> list = this.adjacencyList[vertex].listIterator();
+
+        while (list.hasNext()) {
+            int nextVertex = list.next();
+            if (!visitedVertices[nextVertex]) {
+                dfsRec(nextVertex, visitedVertices);
+            }
+        }
     }
 
     /**
-     * Breadth first search.
+     * Depth first search given a starting vertex.
      */
-    public void bfs() {
+    public void dfs(int vertex) {
+        boolean[] visitedVertices = new boolean[this.vertexCount];
+        dfsRec(vertex, visitedVertices);
+    }
 
+    /**
+     * Breadth first search given a starting vertex.
+     */
+    public void bfs(int vertex) {
+        boolean[] visitedVertices = new boolean[this.vertexCount];
+        LinkedList<Integer> queue = new LinkedList<Integer>();
+        visitedVertices[vertex] = true;
+        queue.add(vertex);
+
+        while (queue.size() != 0) {
+            vertex = queue.poll();
+            System.out.println(vertex);
+
+            ListIterator<Integer> i = this.adjacencyList[vertex].listIterator();
+
+            while (i.hasNext()) {
+                int n = i.next();
+                if (!visitedVertices[n]) {
+                    visitedVertices[n] = true;
+                    queue.add(n);
+                }
+            }
+        }
     }
 }
